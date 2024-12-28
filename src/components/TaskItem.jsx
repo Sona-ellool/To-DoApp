@@ -6,11 +6,11 @@ import EventIcon from '@mui/icons-material/Event';
 import CategoryIcon from '@mui/icons-material/Folder';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { motion } from 'framer-motion';
-import { categories } from '../config/categories';
+import { defaultCategories } from '../config/categories';
 import { format } from 'date-fns';
 
-const TaskItem = ({ task, onDeleteTask, onEditTask, onCompleteTask }) => {
-  const category = categories[task.category] || categories.all;
+const TaskItem = ({ task, onDelete, onEdit, onComplete }) => {
+  const category = defaultCategories[task.category] || defaultCategories.all;
   
   const formatDate = (dateString) => {
     if (!dateString) return null;
@@ -36,7 +36,7 @@ const TaskItem = ({ task, onDeleteTask, onEditTask, onCompleteTask }) => {
       }}>
         <Checkbox
           checked={task.completed}
-          onChange={() => onCompleteTask(task.id)}
+          onChange={() => onComplete(task.id)}
           sx={{ alignSelf: 'flex-start' }}
         />
         
@@ -103,14 +103,14 @@ const TaskItem = ({ task, onDeleteTask, onEditTask, onCompleteTask }) => {
         <Stack direction="row" spacing={1} sx={{ alignSelf: 'flex-start' }}>
           <IconButton 
             size="small" 
-            onClick={() => onEditTask(task)}
+            onClick={() => onEdit(task)}
             disabled={task.completed}
           >
             <EditIcon />
           </IconButton>
           <IconButton 
             size="small" 
-            onClick={() => onDeleteTask(task.id)}
+            onClick={() => onDelete(task.id)}
             color="error"
           >
             <DeleteIcon />

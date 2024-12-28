@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ThemeProvider, createTheme, CssBaseline, Container, IconButton, Box, Alert, CircularProgress, Grid } from '@mui/material';
+import { ThemeProvider, createTheme, CssBaseline, Container, IconButton, Box, Alert, CircularProgress, Grid, Button } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -8,11 +8,13 @@ import TaskList from './components/TaskList';
 import AddTaskForm from './components/AddTaskForm';
 import { collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { db, testConnection, initializeCollections } from './firebase.js';
-import { categories } from './config/categories';
+import { loadCategories, addCategory } from './config/categories';
 import CategoryCard from './components/CategoryCard';
 import FloatingActionButton from './components/FloatingActionButton';
 import { AnimatePresence, motion } from 'framer-motion';
 import TaskDialog from './components/TaskDialog';
+import CategoryDialog from './components/CategoryDialog';
+import { getIconComponent } from './config/icons'; // Add this import
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -23,6 +25,8 @@ const App = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
+  const [categories, setCategories] = useState({});
+  const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
 
   const theme = createTheme({
     palette: {
@@ -119,6 +123,14 @@ const App = () => {
     }
   }, [isConnected]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const loadedCategories = await loadCategories();
+      setCategories(loadedCategories);
+    };
+    fetchCategories();
+  }, []);
+
   const addTask = async (task) => {
     try {
       await addDoc(collection(db, 'tasks'), {
@@ -165,16 +177,18 @@ const App = () => {
 
   const handleSaveTask = async (task) => {
     try {
+      const taskData = {
+        ...task,
+        category: task.category || selectedCategory || 'all',
+        updatedAt: new Date(),
+        completed: editingTask ? editingTask.completed : false,
+        createdAt: editingTask ? editingTask.createdAt : new Date()
+      };
+
       if (editingTask) {
-        await editTask(editingTask.id, {
-          ...task,
-          updatedAt: new Date()
-        });
+        await editTask(editingTask.id, taskData);
       } else {
-        await addTask({ 
-          ...task, 
-          category: selectedCategory || task.category || 'uncategorized'
-        });
+        await addTask(taskData);
       }
       handleCloseDialog();
     } catch (error) {
@@ -201,6 +215,25 @@ const App = () => {
   const handleCloseDialog = () => {
     setIsTaskDialogOpen(false);
     setEditingTask(null);
+  };
+
+  const handleAddCategory = async (categoryData) => {
+    try {
+      const newCategory = await addCategory(categoryData);
+      setCategories(prev => ({
+        ...prev,
+        [newCategory.id]: {
+          ...newCategory,
+          icon: getIconComponent(newCategory.icon)
+        }
+      }));
+    } catch (error) {
+      console.error('Error adding category:', error);
+    }
+  };
+
+  const handleOpenCategoryDialog = () => {
+    setIsCategoryDialogOpen(true);
   };
 
   return (
@@ -252,9 +285,18 @@ const App = () => {
                   gap: { xs: 2, sm: 0 }
                 }}>
                   <h1 style={{ margin: 0 }}>Todo App</h1>
-                  <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
-                    {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
-                  </IconButton>
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      onClick={handleOpenCategoryDialog}
+                      sx={{ mr: 2 }}
+                    >
+                      Add Category
+                    </Button>
+                    <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
+                      {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                    </IconButton>
+                  </Box>
                 </Box>
               </motion.div>
               
@@ -294,6 +336,13 @@ const App = () => {
                 onClose={handleCloseDialog}
                 onAddTask={handleSaveTask}
                 editingTask={editingTask}
+                categories={categories} // Add this prop
+                selectedCategory={selectedCategory}
+              />
+              <CategoryDialog
+                open={isCategoryDialogOpen}
+                onClose={() => setIsCategoryDialogOpen(false)}
+                onSave={handleAddCategory}
               />
             </Box>
           )}

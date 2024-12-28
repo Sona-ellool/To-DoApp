@@ -1,20 +1,37 @@
 import React from 'react';
-import TaskItem from './TaskItem';
-import { Box } from '@mui/material';
-import { AnimatePresence } from 'framer-motion';
+import { Box, Typography } from '@mui/material';
+import TaskCard from './TaskCard';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TaskList = ({ tasks, onDeleteTask, onEditTask, onCompleteTask }) => {
+  if (!tasks.length) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Typography color="text.secondary">
+          No tasks found in this category
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{ mb: 4 }}>
-      <AnimatePresence>
-        {tasks.map(task => (
-          <TaskItem
+    <Box>
+      <AnimatePresence mode="wait">
+        {tasks.map((task) => (
+          <motion.div
             key={task.id}
-            task={task}
-            onDeleteTask={onDeleteTask}
-            onEditTask={onEditTask}
-            onCompleteTask={onCompleteTask}
-          />
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            <TaskCard
+              task={task}
+              onDelete={onDeleteTask}
+              onEdit={onEditTask}
+              onComplete={onCompleteTask}
+            />
+          </motion.div>
         ))}
       </AnimatePresence>
     </Box>

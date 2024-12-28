@@ -10,9 +10,9 @@ import {
   Stack
 } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers';
-import { categories } from '../config/categories';
+import { defaultCategories } from '../config/categories';
 
-const TaskDialog = ({ open, onClose, onAddTask, editingTask }) => {
+const TaskDialog = ({ open, onClose, onAddTask, editingTask, categories }) => { // Add categories prop
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
   const [reminder, setReminder] = useState(null);
@@ -80,6 +80,7 @@ const TaskDialog = ({ open, onClose, onAddTask, editingTask }) => {
               {Object.values(categories).map((cat) => (
                 <MenuItem key={cat.id} value={cat.id}>
                   {cat.name}
+                  {cat.icon && React.createElement(cat.icon, { style: { marginLeft: 8 } })}
                 </MenuItem>
               ))}
             </TextField>
