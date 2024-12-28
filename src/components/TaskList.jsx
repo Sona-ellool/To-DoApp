@@ -8,7 +8,7 @@ const TaskList = ({ tasks, onDeleteTask, onEditTask, onCompleteTask }) => {
     return (
       <Box sx={{ textAlign: 'center', mt: 4 }}>
         <Typography color="text.secondary">
-          No tasks found in this category
+          No tasks found
         </Typography>
       </Box>
     );

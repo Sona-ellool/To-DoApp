@@ -16,8 +16,23 @@ Currently, two official plugins are available:
 - Visual category cards with task counts
 - Real-time category updates
 
+### Global Search
+- Search across all tasks instantly
+- Search by:
+  - Task titles
+  - Task details
+  - Categories
+  - Due dates
+- Real-time search results
+- Animated search interface
+- Preserves category filtering while searching
+
 ## Recent Updates
 - Added category management system
 - Implemented color and icon selection for categories
 - Enhanced task organization with category filtering
 - Improved UI with category icons in task dialogs
+- Added global search functionality
+- Enhanced task filtering system
+- Improved user interface with animated search bar
+- Search through all task fields simultaneously

@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import TaskDialog from './components/TaskDialog';
 import CategoryDialog from './components/CategoryDialog';
 import { getIconComponent } from './config/icons'; // Add this import
+import SearchBar from './components/SearchBar'; // Add this import
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -27,6 +28,7 @@ const App = () => {
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false);
   const [categories, setCategories] = useState({});
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // Add this state
 
   const theme = createTheme({
     palette: {
@@ -196,11 +198,34 @@ const App = () => {
     }
   };
 
+  const searchTasks = (tasks, term) => {
+    if (!term) return tasks;
+    
+    const searchLower = term.toLowerCase();
+    return tasks.filter(task => {
+      const category = categories[task.category];
+      const categoryName = category ? category.name.toLowerCase() : '';
+      const dueDate = task.reminder ? new Date(task.reminder).toLocaleString() : '';
+      
+      return (
+        task.title.toLowerCase().includes(searchLower) ||
+        (task.details && task.details.toLowerCase().includes(searchLower)) ||
+        categoryName.includes(searchLower) ||
+        dueDate.includes(searchLower)
+      );
+    });
+  };
+
   const getFilteredTasks = (categoryId) => {
-    if (!categoryId || categoryId === 'all') {
-      return tasks;
+    let filtered = tasks;
+    if (categoryId && categoryId !== 'all') {
+      filtered = tasks.filter(task => task.category === categoryId);
     }
-    return tasks.filter(task => task.category === categoryId);
+    return searchTasks(filtered, searchTerm);
+  };
+
+  const handleSearch = (term) => {
+    setSearchTerm(term);
   };
 
   const handleCategoryClick = (categoryId) => {
@@ -285,7 +310,8 @@ const App = () => {
                   gap: { xs: 2, sm: 0 }
                 }}>
                   <h1 style={{ margin: 0 }}>Todo App</h1>
-                  <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <SearchBar onSearch={handleSearch} />
                     <Button
                       variant="outlined"
                       onClick={handleOpenCategoryDialog}
