@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   List, 
   IconButton, 
@@ -15,9 +15,11 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { format, isAfter, isBefore, isToday, parseISO } from 'date-fns';
+import Celebration from './Celebration';
 
 const TaskList = ({ tasks, onDeleteTask, onEditTask, onCompleteTask, categories }) => {
   const { t } = useTranslation();
+  const [celebrationPosition, setCelebrationPosition] = useState(null);
 
   const getDueDateColor = (dueDate) => {
     if (!dueDate) return 'inherit';
@@ -49,6 +51,28 @@ const TaskList = ({ tasks, onDeleteTask, onEditTask, onCompleteTask, categories 
     );
   };
 
+  const handleComplete = (event, taskId) => {
+    const task = tasks.find(t => t.id === taskId);
+    
+    if (!task.completed) {
+      // Get the checkbox's parent element (the task card)
+      const taskCard = event.target.closest('div.MuiPaper-root');
+      const rect = taskCard.getBoundingClientRect();
+      
+      setCelebrationPosition({
+        x: rect.left,
+        y: rect.top
+      });
+
+      // Reset celebration position after animation
+      setTimeout(() => {
+        setCelebrationPosition(null);
+      }, 2000);
+    }
+    
+    onCompleteTask(taskId);
+  };
+
   if (!tasks.length) {
     return (
       <Box sx={{ textAlign: 'center', mt: 4 }}>
@@ -61,6 +85,11 @@ const TaskList = ({ tasks, onDeleteTask, onEditTask, onCompleteTask, categories 
 
   return (
     <List>
+      {celebrationPosition && (
+        <Celebration 
+          cardPosition={celebrationPosition} 
+        />
+      )}
       <AnimatePresence mode="wait">
         {tasks.map((task) => {
           const category = categories[task.category];
@@ -89,7 +118,7 @@ const TaskList = ({ tasks, onDeleteTask, onEditTask, onCompleteTask, categories 
                 }}>
                   <Checkbox
                     checked={task.completed}
-                    onChange={() => onCompleteTask(task.id)}
+                    onChange={(e) => handleComplete(e, task.id)}
                   />
                   
                   {/* Category chip moved inline */}

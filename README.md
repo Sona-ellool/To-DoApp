@@ -1,99 +1,65 @@
 # To-Do List App
 
-A modern, feature-rich task management application built with React, Material-UI, and Firebase.
+A modern task management application with rich features and celebrations.
 
-## Features
+## 🎉 New Features
 
-- 🌓 Light/Dark mode support
-- 🌐 Multilingual support (English, Arabic, French)
-- 📱 Responsive design
-- 🔄 Real-time updates with Firebase
-- 📂 Category-based task organization
-- 🔍 Advanced search functionality
-- 🔄 Task sorting and filtering
-- 📅 Due date tracking with visual indicators
-- 💾 Offline support
-- ⚡ Performance optimized
+- Task completion celebrations with confetti and sound
+- Advanced filtering and sorting
+- Multi-language support (EN, AR, FR)
+- Category management
+- Real-time updates
+- Dark/Light theme
 
-## Technology Stack
+## 🚀 Quick Start
 
-- React 18
-- Material-UI v5
-- Firebase v9
-- i18next for internationalization
-- Framer Motion for animations
-- date-fns for date handling
-- Vite for build tooling
-
-## Getting Started
-
-1. Clone the repository:
+1. Clone and install:
 ```bash
-git clone https://github.com/yourusername/todo-app.git
-cd todo-app
-```
-
-2. Install dependencies:
-```bash
+git clone https://github.com/Sona-ellool/To-DoApp.git
+cd To-DoApp
 npm install
 ```
 
-3. Create a `.env` file in the root directory with your Firebase configuration:
-```env
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-```
-
-4. Start the development server:
+2. Create `.env` file with Firebase config
+3. Start development server:
 ```bash
 npm run dev
 ```
 
-## Features in Detail
+## 📦 Setup Requirements
+
+- Node.js 16+
+- npm or yarn
+- Firebase account
+
+## 🎨 Features
 
 ### Task Management
 - Create, edit, and delete tasks
-- Mark tasks as complete/incomplete
-- Add due dates with visual indicators
-- Categorize tasks with custom categories
+- Completion celebrations
+- Due date tracking
+- Category organization
 
 ### Categories
-- Create custom categories with colors and icons
-- Filter tasks by category
-- Visual organization of tasks
+- Custom colors and icons
+- Visual grouping
+- Task filtering
 
-### Filtering and Sorting
-- Filter tasks by status (All/Active/Completed)
-- Sort tasks by:
-  - Name
-  - Due Date
-  - Category
-  - Creation Date
-  - Status
+### UI/UX
+- Responsive design
+- Dark/Light themes
+- RTL support
+- Animations
 
-### Search
-- Search across all task fields
-- Real-time search results
-- Search within categories
+## 🛠 Tech Stack
 
-### Internationalization
-- Support for multiple languages
-- RTL layout support for Arabic
-- Easy language switching
+- React 18
+- Material-UI 5
+- Firebase 9
+- i18next
+- Framer Motion
+- Canvas Confetti
 
-### Theme
-- Light and dark mode support
-- Persistent theme preference
-- Smooth theme transitions
+## 📄 License
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License
