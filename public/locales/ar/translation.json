@@ -1,0 +1,18 @@
+{
+  "appTitle": "تطبيق قائمة المهام",
+  "addCategory": "إضافة فئة",
+  "searchPlaceholder": "البحث عن المهام...",
+  "loading": "جاري تحميل التطبيق...",
+  "addTask": "إضافة مهمة",
+  "editTask": "تعديل المهمة",
+  "deleteTask": "حذف المهمة",
+  "taskTitle": "العنوان",
+  "taskDetails": "التفاصيل",
+  "taskCategory": "الفئة",
+  "taskDueDate": "تاريخ الاستحقاق",
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "delete": "حذف",
+  "completed": "مكتمل",
+  "incomplete": "غير مكتمل"
+}

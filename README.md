@@ -1,38 +1,99 @@
-# Todo App
+# To-Do List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A modern, feature-rich task management application built with React, Material-UI, and Firebase.
 
 ## Features
 
-### Category Management
-- Create custom categories with personalized colors and icons
-- Organize tasks by categories
+- 🌓 Light/Dark mode support
+- 🌐 Multilingual support (English, Arabic, French)
+- 📱 Responsive design
+- 🔄 Real-time updates with Firebase
+- 📂 Category-based task organization
+- 🔍 Advanced search functionality
+- 🔄 Task sorting and filtering
+- 📅 Due date tracking with visual indicators
+- 💾 Offline support
+- ⚡ Performance optimized
+
+## Technology Stack
+
+- React 18
+- Material-UI v5
+- Firebase v9
+- i18next for internationalization
+- Framer Motion for animations
+- date-fns for date handling
+- Vite for build tooling
+
+## Getting Started
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/todo-app.git
+cd todo-app
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create a `.env` file in the root directory with your Firebase configuration:
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+## Features in Detail
+
+### Task Management
+- Create, edit, and delete tasks
+- Mark tasks as complete/incomplete
+- Add due dates with visual indicators
+- Categorize tasks with custom categories
+
+### Categories
+- Create custom categories with colors and icons
 - Filter tasks by category
-- Visual category cards with task counts
-- Real-time category updates
+- Visual organization of tasks
 
-### Global Search
-- Search across all tasks instantly
-- Search by:
-  - Task titles
-  - Task details
-  - Categories
-  - Due dates
+### Filtering and Sorting
+- Filter tasks by status (All/Active/Completed)
+- Sort tasks by:
+  - Name
+  - Due Date
+  - Category
+  - Creation Date
+  - Status
+
+### Search
+- Search across all task fields
 - Real-time search results
-- Animated search interface
-- Preserves category filtering while searching
+- Search within categories
 
-## Recent Updates
-- Added category management system
-- Implemented color and icon selection for categories
-- Enhanced task organization with category filtering
-- Improved UI with category icons in task dialogs
-- Added global search functionality
-- Enhanced task filtering system
-- Improved user interface with animated search bar
-- Search through all task fields simultaneously
+### Internationalization
+- Support for multiple languages
+- RTL layout support for Arabic
+- Easy language switching
+
+### Theme
+- Light and dark mode support
+- Persistent theme preference
+- Smooth theme transitions
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

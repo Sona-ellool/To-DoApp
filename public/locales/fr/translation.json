@@ -1,0 +1,18 @@
+{
+  "appTitle": "Application Liste de Tâches",
+  "addCategory": "Ajouter une catégorie",
+  "searchPlaceholder": "Rechercher des tâches...",
+  "loading": "Chargement de l'application...",
+  "addTask": "Ajouter une tâche",
+  "editTask": "Modifier la tâche",
+  "deleteTask": "Supprimer la tâche",
+  "taskTitle": "Titre",
+  "taskDetails": "Détails",
+  "taskCategory": "Catégorie",
+  "taskDueDate": "Date d'échéance",
+  "save": "Enregistrer",
+  "cancel": "Annuler",
+  "delete": "Supprimer",
+  "completed": "Terminé",
+  "incomplete": "En cours"
+}

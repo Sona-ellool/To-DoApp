@@ -16,12 +16,15 @@ import TaskDialog from './components/TaskDialog';
 import CategoryDialog from './components/CategoryDialog';
 import { getIconComponent } from './config/icons'; // Add this import
 import SearchBar from './components/SearchBar'; // Add this import
+import { useTranslation } from 'react-i18next';
+import { Select, MenuItem } from '@mui/material';
+import TaskFilters from './components/TaskFilters';
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false); // Changed default to false
   const [isConnected, setIsConnected] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -29,6 +32,14 @@ const App = () => {
   const [categories, setCategories] = useState({});
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState(''); // Add this state
+  const [taskFilter, setTaskFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('created');
+  const { t, i18n } = useTranslation();
+  
+  const changeLanguage = (event) => {
+    i18n.changeLanguage(event.target.value);
+    document.dir = event.target.value === 'ar' ? 'rtl' : 'ltr';
+  };
 
   const theme = createTheme({
     palette: {
@@ -72,6 +83,7 @@ const App = () => {
         },
       },
     },
+    direction: i18n.dir(),
   });
 
   useEffect(() => {
@@ -216,12 +228,48 @@ const App = () => {
     });
   };
 
+  const sortTasks = (tasks, sortBy) => {
+    return [...tasks].sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.title.localeCompare(b.title);
+        case 'dueDate':
+          if (!a.reminder) return 1;
+          if (!b.reminder) return -1;
+          return new Date(a.reminder) - new Date(b.reminder);
+        case 'category':
+          const catA = categories[a.category]?.name || '';
+          const catB = categories[b.category]?.name || '';
+          return catA.localeCompare(catB);
+        case 'status':
+          return (a.completed === b.completed) ? 0 : a.completed ? 1 : -1;
+        case 'created':
+        default:
+          return b.createdAt - a.createdAt;
+      }
+    });
+  };
+
   const getFilteredTasks = (categoryId) => {
     let filtered = tasks;
+    
+    // Category filter
     if (categoryId && categoryId !== 'all') {
-      filtered = tasks.filter(task => task.category === categoryId);
+      filtered = filtered.filter(task => task.category === categoryId);
     }
-    return searchTasks(filtered, searchTerm);
+    
+    // Status filter
+    if (taskFilter !== 'all') {
+      filtered = filtered.filter(task => 
+        taskFilter === 'completed' ? task.completed : !task.completed
+      );
+    }
+    
+    // Search filter
+    filtered = searchTasks(filtered, searchTerm);
+    
+    // Sort
+    return sortTasks(filtered, sortBy);
   };
 
   const handleSearch = (term) => {
@@ -309,15 +357,25 @@ const App = () => {
                   flexDirection: { xs: 'column', sm: 'row' },
                   gap: { xs: 2, sm: 0 }
                 }}>
-                  <h1 style={{ margin: 0 }}>Todo App</h1>
+                  <h1 style={{ margin: 0 }}>{t('appTitle')}</h1>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Select
+                      value={i18n.language}
+                      onChange={changeLanguage}
+                      size="small"
+                      sx={{ minWidth: 120 }}
+                    >
+                      <MenuItem value="en">English</MenuItem>
+                      <MenuItem value="ar">العربية</MenuItem>
+                      <MenuItem value="fr">Français</MenuItem>
+                    </Select>
                     <SearchBar onSearch={handleSearch} />
                     <Button
                       variant="outlined"
                       onClick={handleOpenCategoryDialog}
                       sx={{ mr: 2 }}
                     >
-                      Add Category
+                      {t('addCategory')}
                     </Button>
                     <IconButton onClick={() => setDarkMode(!darkMode)} color="inherit">
                       {darkMode ? <Brightness7Icon /> : <Brightness4Icon />}
@@ -346,11 +404,18 @@ const App = () => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: 20, opacity: 0 }}
                   >
+                    <TaskFilters
+                      filter={taskFilter}
+                      onFilterChange={setTaskFilter}
+                      sortBy={sortBy}
+                      onSortChange={setSortBy}
+                    />
                     <TaskList 
                       tasks={getFilteredTasks(selectedCategory)}
                       onDeleteTask={deleteTask}
                       onEditTask={handleEditTask}
                       onCompleteTask={toggleCompleted}
+                      categories={categories}
                     />
                   </motion.div>
                 )}
